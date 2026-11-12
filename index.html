@@ -258,7 +258,8 @@
   .hrow{display:grid;grid-template-columns:5.8vw 8.8vw 6.2vw 4.6vw 6.2vw auto;align-items:center;font-size:1.24vw;min-height:2.75vw;cursor:pointer}
   .hrow .t{font-weight:700;font-variant-numeric:tabular-nums}
   .hrow .t sup,.hrow .b sup{font-size:.55em;vertical-align:.6em;margin:0 .05em;font-weight:700}
-  .hrow .al{font-weight:800;letter-spacing:.08em;font-size:.88em;white-space:nowrap}
+  .hrow .al{display:flex;align-items:center}
+  .hrow .al img{width:7.6vw;height:auto;display:block}
   .hrow .fn{font-weight:400}
   .hrow .ds{font-weight:700}
   .hrow .b{font-weight:700;font-variant-numeric:tabular-nums}
@@ -942,7 +943,7 @@
         const pill = kind === "cxl" ? `<span class="pill2 cxl">Annulé</span>` : late ? `<span class="pill2 late">Retardé</span>` : `<span class="pill2 ok">À l'heure</span>`;
         const num = (f.number || "").replace(/\s+/g, "");
         const b = briefingOf(f);
-        return `<div class="hrow" data-i="${i}"><span class="t">${hH(f.sched)}</span><span class="al">AIR FRANCE</span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
+        return `<div class="hrow" data-i="${i}"><span class="t">${hH(f.sched)}</span><span class="al"><img src="img/air-france-blanc.png" alt="Air France"></span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
       }).join("");
       el.querySelectorAll(".hrow").forEach(r => r.onclick = () => showDetail(arr[+r.dataset.i]));
     };
