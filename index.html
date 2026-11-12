@@ -259,7 +259,8 @@
   .hrow .t{font-weight:700;font-variant-numeric:tabular-nums}
   .hrow .t sup,.hrow .b sup{font-size:.55em;vertical-align:.6em;margin:0 .05em;font-weight:700}
   .hrow .al{display:flex;align-items:center}
-  .hrow .al img{width:7.6vw;height:auto;display:block}
+  .hrow .al .afw{width:7.6vw;height:auto;display:block}
+  .hrow .al .afs{display:none}
   .hrow .fn{font-weight:400}
   .hrow .ds{font-weight:700}
   .hrow .b{font-weight:700;font-variant-numeric:tabular-nums}
@@ -282,13 +283,15 @@
     #hub .hfoot{margin-top:28px}
     #hub h2{font-size:24px;margin-bottom:10px}
     #hub .hrows{gap:9px}
-    .hrow{grid-template-columns:54px 62px 40px 52px 1fr;font-size:15px;min-height:30px}
-    .hrow .al{display:none}
+    .hrow{grid-template-columns:48px 15px 56px 36px 48px 1fr;font-size:14.5px;min-height:30px}
+    .hrow .al .afw{display:none}
+    .hrow .al .afs{display:block;height:13px;width:auto}
+    .hrow .pill2{padding:.3em .55em;font-size:.88em}
     #hub .hlogo{width:54px}
     #hub .hclock2{font-size:16px;padding:6px 12px;border-radius:10px}
     #hub .hnone{font-size:14px}
   }
-  @media (max-width:380px){ .hrow{grid-template-columns:46px 54px 34px 44px 1fr;font-size:13px} }
+  @media (max-width:380px){ .hrow{grid-template-columns:42px 13px 50px 32px 42px 1fr;font-size:13px} .hrow .al .afs{height:11px} }
 </style>
 </head>
 <body>
@@ -943,7 +946,7 @@
         const pill = kind === "cxl" ? `<span class="pill2 cxl">Annulé</span>` : late ? `<span class="pill2 late">Retardé</span>` : `<span class="pill2 ok">À l'heure</span>`;
         const num = (f.number || "").replace(/\s+/g, "");
         const b = briefingOf(f);
-        return `<div class="hrow" data-i="${i}"><span class="t">${hH(f.sched)}</span><span class="al"><img src="img/air-france-blanc.png" alt="Air France"></span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
+        return `<div class="hrow" data-i="${i}"><span class="t">${hH(f.sched)}</span><span class="al"><img class="afw" src="img/air-france-blanc.png" alt="Air France"><img class="afs" src="img/air-france-virgule.png" alt="Air France"></span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
       }).join("");
       el.querySelectorAll(".hrow").forEach(r => r.onclick = () => showDetail(arr[+r.dataset.i]));
     };
