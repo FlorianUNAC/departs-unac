@@ -1,5 +1,5 @@
 // Service worker : l'appli s'ouvre même sans réseau (dernières données connues)
-const CACHE = "departs-unac-v17";
+const CACHE = "departs-unac-v18";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "img/avion-unac.png", "img/unac-texte.png", "img/logo-unac-blanc.png", "fonts/sfr-r.woff2", "fonts/sfr-b.woff2", "img/titre-prochains-departs.png", "img/titre-lc.png", "img/titre-mc.png", "img/air-france-blanc.png", "img/air-france-virgule.png",
   "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png", "icons/favicon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });

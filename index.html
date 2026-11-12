@@ -971,6 +971,14 @@
     const fill = (id, arr) => {
       const el = $(id);
       if (!arr.length){ el.innerHTML = `<div class="hnone">${state.mode==="init" ? "Chargement…" : "Aucun départ à venir"}</div>`; return; }
+      // Si plus de la moitié des lignes affichées ont un briefing terminé, on retire
+      // les plus anciens terminés (25 % des lignes) pour faire monter les prochains vols plus tôt.
+      const isDone = f => briefFlap(f, statusOf(f)[2]).k === "done";
+      const shown = arr.slice(0, n), nDone = shown.filter(isDone).length;
+      if (nDone > shown.length / 2 && arr.length > n){
+        let drop = Math.min(Math.ceil(n * 0.25), arr.length - n);
+        arr = arr.filter(f => !(drop > 0 && isDone(f) && drop--));
+      }
       el.innerHTML = arr.slice(0, n).map((f,i) => {
         const [, , kind] = statusOf(f);
         const late = f.rev && f.sched && (f.rev - f.sched) > 5*60e3;
