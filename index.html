@@ -252,10 +252,13 @@
   #hub .ttl{height:1.55vw;width:auto;display:block}
   #hub .ttl2{height:2.1vw;width:auto;display:block}
   #hub .hplane{position:absolute;right:0;top:2.2vw;width:19vw;filter:drop-shadow(0 .4vw .8vw rgba(0,0,0,.25))}
-  #hub .cols{display:grid;grid-template-columns:1fr 1fr;gap:3.6vw;margin-top:6.2vw;flex:1}
+  #hub .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3.6vw;margin-top:6.2vw;flex:1}
   #hub h2{font-family:Inter,sans-serif;font-size:2.6vw;font-weight:800;margin-bottom:1.6vw}
-  #hub .hrows{display:flex;flex-direction:column;gap:1.05vw}
-  .hrow{display:grid;grid-template-columns:5.8vw 8.8vw 6.2vw 4.6vw 6.2vw auto;align-items:center;font-size:1.24vw;min-height:2.75vw;cursor:pointer}
+  #hub .hrows{display:flex;flex-direction:column;gap:1.05vw;position:relative}
+  #hub .hrows .hrow{position:relative;z-index:1}
+  #hub .bcol{position:absolute;z-index:0;background:rgba(255,255,255,.15);border-radius:1.1vw;pointer-events:none}
+  #hub .bcol span{position:absolute;left:0;right:0;top:.55vw;text-align:center;font-size:.78vw;font-weight:400;opacity:.9;white-space:nowrap}
+  .hrow{display:grid;grid-template-columns:5.6vw 8.4vw 5.8vw 4.4vw 6.4vw auto;align-items:center;font-size:1.24vw;min-height:2.75vw;cursor:pointer}
   .hrow .t{font-weight:700;font-variant-numeric:tabular-nums}
   .hrow .t sup,.hrow .b sup{font-size:.55em;vertical-align:.6em;margin:0 .05em;font-weight:700}
   .hrow .al{display:flex;align-items:center}
@@ -263,7 +266,8 @@
   .hrow .al .afs{display:none}
   .hrow .fn{font-weight:400}
   .hrow .ds{font-weight:700}
-  .hrow .b{font-weight:700;font-variant-numeric:tabular-nums}
+  .hrow .b{font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+  .hrow .pill2{margin-left:1vw}
   .hrow .pill2{justify-self:start;font-weight:700;font-size:.95em;padding:.38em .8em;border-radius:.55em;white-space:nowrap}
   .pill2.b-wait{background:rgba(255,255,255,.16);color:#f3e6ee}
   .pill2.b-near{background:#ffe07a;color:#3a2a00}
@@ -292,7 +296,9 @@
     .hrow{grid-template-columns:48px 15px 56px 36px 48px 1fr;font-size:14.5px;min-height:30px}
     .hrow .al .afw{display:none}
     .hrow .al .afs{display:block;height:13px;width:auto}
-    .hrow .pill2{padding:.3em .55em;font-size:.88em}
+    .hrow .pill2{padding:.3em .55em;font-size:.88em;margin-left:10px}
+    #hub .bcol{border-radius:10px}
+    #hub .bcol span{font-size:9.5px;top:5px}
     #hub .hlogo{width:54px}
     #hub .hclock2{font-size:16px;padding:6px 12px;border-radius:10px}
     #hub .hnone{font-size:14px}
@@ -959,6 +965,20 @@
         return `<div class="hrow" data-i="${i}"><span class="t${late ? " late" : ""}">${hH(late ? f.rev : f.sched)}</span><span class="al"><img class="afw" src="img/air-france-blanc.png" alt="Air France"><img class="afs" src="img/air-france-virgule.png" alt="Air France"></span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
       }).join("");
       el.querySelectorAll(".hrow").forEach(r => r.onclick = () => showDetail(arr[+r.dataset.i]));
+      // Colonne « Briefing PEQ » mise en avant (encart arrondi derrière les horaires)
+      const bs = el.querySelectorAll(".hrow .b");
+      if (bs.length){
+        const first = bs[0], last = bs[bs.length-1], mob = window.innerWidth <= 760;
+        const px = mob ? 6 : window.innerWidth * .009, py = mob ? 6 : window.innerWidth * .008, lab = mob ? 16 : window.innerWidth * .017;
+        const r0 = first.closest(".hrow"), r1 = last.closest(".hrow");
+        const box = document.createElement("div"); box.className = "bcol";
+        box.style.left = (first.offsetLeft - px) + "px";
+        box.style.width = (first.offsetWidth + 2*px) + "px";
+        box.style.top = (r0.offsetTop - py - lab) + "px";
+        box.style.height = (r1.offsetTop + r1.offsetHeight - r0.offsetTop + 2*py + lab) + "px";
+        box.innerHTML = "<span>Briefing PEQ</span>";
+        el.prepend(box);
+      }
     };
     fill("#hubLC", list.filter(f => f.lc));
     fill("#hubMC", list.filter(f => !f.lc));
