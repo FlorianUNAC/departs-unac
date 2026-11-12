@@ -7,7 +7,7 @@ const KEY = process.env.AFKL_API_KEY;
 const OUT = "data/flights.json";
 const H = 3600e3, FULL_EVERY_H = 12, DAILY_CAP = 95;
 const TZ = "Europe/Paris";
-if (!KEY) { console.error("Secret AFKL_API_KEY manquant"); process.exit(1); }
+if (!KEY) { console.log("Secret AFKL_API_KEY pas encore renseigné : rien à faire."); process.exit(0); }
 
   const MC_COUNTRIES = new Set(("FR,DE,AT,BE,BG,CY,HR,DK,ES,EE,FI,GR,HU,IE,IT,LV,LT,LU,MT,NL,PL,PT,CZ,RO,SK,SI,SE,"+
     "GB,CH,NO,IS,LI,MC,AD,SM,VA,RS,BA,ME,MK,AL,XK,UA,MD,BY,RU,GE,AM,AZ,TR,MA,DZ,TN,LY,EG,IL,LB,JO").split(","));
