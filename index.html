@@ -271,7 +271,8 @@
   .hrow .b .sw{position:relative;display:block;height:1.3em;overflow:hidden}
   .hrow .b .s1,.hrow .b .s2{position:absolute;left:0;right:0;top:0;line-height:1.3em;text-align:center;white-space:nowrap;animation:8s ease-in-out infinite;animation-delay:var(--d)}
   .hrow .b .s1{animation-name:swA}
-  .hrow .b .bon{font-weight:800;white-space:nowrap}
+  .hrow .b .bon{font-weight:800;white-space:nowrap;animation:bonPulse 2.6s ease-in-out infinite}
+  @keyframes bonPulse{0%,100%{opacity:1;text-shadow:0 0 .6em rgba(255,255,255,.35)}50%{opacity:.5;text-shadow:none}}
   .hrow .b .bdone{font-weight:400;opacity:.5;white-space:nowrap}
   .hrow .b .s2{animation-name:swB;color:#ffe07a}
   .hrow .b .cdn{display:flex;align-items:center;justify-content:center;gap:.25em}
