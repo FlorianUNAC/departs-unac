@@ -279,6 +279,8 @@
   .hrow.empty{opacity:.5;cursor:default}
   #hub .hfoot{display:flex;align-items:flex-end;justify-content:center;position:relative;margin-top:2vw}
   #hub .hlogo{width:5.6vw;height:auto}
+  #hub .hclock2 .colon{animation:colon 2s steps(1) infinite}
+  @keyframes colon{50%{opacity:0}}
   #hub .hclock2{position:absolute;right:0;bottom:.6vw;background:rgba(255,255,255,.18);border-radius:.9vw;padding:.7vw 1.5vw;font-size:1.55vw;font-weight:700;font-variant-numeric:tabular-nums}
   #hub .hnone{font-size:1.2vw;opacity:.7}
   #hub .hubgear{position:absolute;left:0;bottom:.6vw;align-self:auto;margin:0}
@@ -470,7 +472,7 @@
   const fmtClock = new Intl.DateTimeFormat("fr-FR",{timeZone:TZ,hour:"2-digit",minute:"2-digit",second:"2-digit"});
   const fmtDate  = new Intl.DateTimeFormat("fr-FR",{timeZone:TZ,weekday:"long",day:"numeric",month:"long",year:"numeric"});
   const fmtHM    = new Intl.DateTimeFormat("fr-FR",{timeZone:TZ,hour:"2-digit",minute:"2-digit"});
-  function tick(){ const n=new Date(); flapCell($("#clock"), fmtHM.format(n), 5); $("#date").textContent=fmtDate.format(n); const hc=$("#hubClock"); if (hc) hc.textContent=fmtHM.format(n); }
+  function tick(){ const n=new Date(); flapCell($("#clock"), fmtHM.format(n), 5); $("#date").textContent=fmtDate.format(n); const hc=$("#hubClock"); if (hc){ const [hh,mm]=fmtHM.format(n).split(":"); const v=`${hh}<span class="colon">:</span>${mm}`; if (hc.dataset.v!==v){ hc.innerHTML=v; hc.dataset.v=v; } } }
 
   /* Chaîne "YYYY-MM-DDTHH:mm" à l'heure de Paris */
   function parisLocal(d){
