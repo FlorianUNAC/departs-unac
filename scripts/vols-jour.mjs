@@ -65,6 +65,7 @@ function normalize(op, kind) {                     // kind : "dep" | "arr"
   return {
     kind, number: "AF " + op.flightNumber, sched, eff: est ? new Date(est) : sched,
     city: cap(other?.city?.name || other?.name || other?.code || "—"), iata: other?.code || "",
+    terminal: (() => { const pl = info.airport?.places || {}; let t = String(pl.departureTerminal || pl.arrivalTerminal || pl.boardingTerminal || pl.terminalCode || "").replace(/^T/i, ""); if (/^[A-G]$/i.test(t) && pl.aerogareCode) t = pl.aerogareCode + t; return t; })(),
     ac: acCode, reg: ac.registration || "", lc: classifyLc(acCode, op.haul, other?.city?.country?.code), hop,
     cancelled: leg.irregularity?.cancelled === "Y" || /CANCEL/i.test(leg.legStatusPublic || ""),
     rotation: kind === "dep" && !!(prev && prev.flightScheduleDate === op.flightScheduleDate)
