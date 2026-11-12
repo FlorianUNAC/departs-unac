@@ -463,6 +463,16 @@
     } while (page < pages && page < 8);
     return all.map(normalizeAfkl).filter(Boolean);
   }
+  const CITY_FR = {"WARSAW": "Varsovie", "BRUSSELS": "Bruxelles", "LONDON": "Londres", "COPENHAGEN": "Copenhague", "GOTEBORG": "Goteborg", "ATHENS": "Athenes", "LISBON": "Lisbonne", "VIENNA": "Vienne", "VENICE": "Venise", "BARCELONA": "Barcelone", "SEVILLE": "Seville", "ALGIERS": "Alger", "BEIRUT": "Beyrouth", "CAIRO": "Le Caire", "TEL AVIV-YAFO": "Tel Aviv", "BEIJING": "Pekin", "SEOUL": "Seoul", "SINGAPORE": "Singapour", "MEXICO CITY": "Mexico", "PANAMA CITY": "Panama", "CAPE TOWN": "Le Cap", "SAO PAULO": "Sao Paulo", "MAURITIUS": "Maurice", "SAINT DENIS DE LA REUNION": "La Reunion", "POINTE A PITRE": "Pointe-a-Pitre", "ST MAARTEN": "Saint-Martin", "DUESSELDORF": "Dusseldorf", "HANNOVER": "Hanovre", "HAMBURG": "Hambourg", "BASEL/MULHOUSE": "Bale-Mulhouse", "GENEVA": "Geneve", "EDINBURGH": "Edimbourg", "BUCHAREST": "Bucarest", "KRAKOW": "Cracovie", "THESSALONIKI": "Thessalonique", "NAPLES": "Naples", "PALERMO": "Palerme", "CATANIA": "Catane", "BOLOGNA": "Bologne", "GENOA": "Genes", "MOSCOW": "Moscou", "DUBAI": "Dubai", "RIYADH": "Riyad", "JEDDAH": "Djeddah", "MONTREAL": "Montreal", "QUEBEC": "Quebec", "HO CHI MINH CITY": "Ho Chi Minh", "HANOI": "Hanoi", "BOGOTA": "Bogota", "LOME": "Lome", "YAOUNDE": "Yaounde", "NUREMBERG": "Nuremberg", "VALENCIA": "Valence", "FLORENCE": "Florence", "MUNICH": "Munich", "MILAN": "Milan", "TURIN": "Turin", "COLOGNE": "Cologne", "STUTTGART": "Stuttgart", "BERLIN": "Berlin", "DUBLIN": "Dublin", "MANCHESTER": "Manchester", "BIRMINGHAM": "Birmingham", "NEWCASTLE": "Newcastle", "NEW YORK": "New York", "WASHINGTON": "Washington", "SAN FRANCISCO": "San Francisco", "LOS ANGELES": "Los Angeles", "TAHITI": "Papeete", "PHUKET": "Phuket", "DELHI": "Delhi", "MUMBAI": "Bombay", "BENGALURU": "Bangalore", "TOKYO": "Tokyo", "OSAKA": "Osaka", "SHANGHAI": "Shanghai", "HONG KONG": "Hong Kong", "BANGKOK": "Bangkok"};
+  // LC/MC selon la flotte : gros-porteur = long-courrier, monocouloir = moyen-courrier
+  const WIDEBODY = new Set(["A330","A332","A333","A339","A350","A35K","A380","B772","B77W","B773","B787","B78X"]);
+  function classifyLc(acCode, haul, country){
+    if (acCode && WIDEBODY.has(acCode)) return true;
+    if (acCode && /^(A2|A3[12]|E1|CRJ|AT7|DH)/.test(acCode)) return false;
+    return isLongHaul(haul, country);
+  }
+  const isTrain = ac => /^TRN$/i.test(ac.typeCode||"") || /TRAIN|TGV|RAIL/i.test(ac.typeName||"");
+  const cityFr = n => { const k = String(n||"").toUpperCase().trim(); return CITY_FR[k] || n; };
   function afklStatus(code, cancelled, sched, rev){
     const c = (code||"").toUpperCase();
     if (cancelled === "Y" || /CANCEL/.test(c)) return "Canceled";
@@ -479,7 +489,7 @@
     if (!leg) return null;
     if (op.airline && op.airline.code && op.airline.code !== "AF") return null;
     const dep = leg.departureInformation || {}, t = dep.times || {}, pl = (dep.airport && dep.airport.places) || {};
-    const last = legs[legs.length-1] || leg, arr = (last.arrivalInformation && last.arrivalInformation.airport) || {};
+    const arr = (leg.arrivalInformation && leg.arrivalInformation.airport) || {};   // destination = escale suivante après CDG
     const sched = t.scheduled ? new Date(t.scheduled) : null;
     const est = t.actual || t.estimatedPublic || t.latestPublished;
     let rev = est ? new Date(est) : null;
@@ -489,10 +499,12 @@
     if (/^[A-G]$/i.test(term) && pl.aerogareCode) term = pl.aerogareCode + term;
     const statusCode = leg.legStatusPublic || op.flightStatusPublic || "";
     const ac = leg.aircraft || {};
+    if (isTrain(ac)) return null;                                   // TGV AIR : pas un vol
+    const acCode = acShort(ac.typeCode, ac.typeName);
     return {
       id: op.id || ("AF" + op.flightNumber + op.flightScheduleDate),
       number: "AF " + op.flightNumber,
-      dest: (arr.city && arr.city.name) || arr.name || arr.code || "—",
+      dest: cityFr((arr.city && arr.city.name) || arr.name || arr.code || "—"),
       destAirport: arr.name || "", destIata: arr.code || "",
       sched, rev,
       terminal: term,
@@ -500,9 +512,9 @@
       checkIn: (pl.checkInZone || []).join(", "),
       status: afklStatus(statusCode, leg.irregularity && leg.irregularity.cancelled, sched, rev),
       statusLabel: leg.legStatusPublicLangTransl || op.flightStatusPublicLangTransl || "",
-      lc: isLongHaul(op.haul, arr.city && arr.city.country && arr.city.country.code),
+      lc: classifyLc(acCode, op.haul, arr.city && arr.city.country && arr.city.country.code),
       aircraft: [ac.typeName, ac.registration].filter(Boolean).join(" · "),
-      ac: acShort(ac.typeCode, ac.typeName),
+      ac: acCode,
       hop: /^A5$/i.test(ac.ownerAirlineCode||"") || /HOP/i.test((ac.cabinCrewEmployer||"") + (ac.ownerAirlineName||"")),
       prevFlight: prevOf(op),
       rotation: isRotation(op)
