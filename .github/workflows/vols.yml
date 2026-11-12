@@ -1,0 +1,33 @@
+name: Mise à jour des vols
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"     # toutes les 30 min (heure UTC) ; pause de nuit gérée par le script
+  workflow_dispatch: {}          # lancement manuel possible depuis l'onglet Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vols
+  cancel-in-progress: false
+
+jobs:
+  vols:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Récupérer les départs Air France de CDG
+        env:
+          AFKL_API_KEY: ${{ secrets.AFKL_API_KEY }}
+        run: node scripts/fetch-flights.mjs
+      - name: Publier les données
+        run: |
+          git config user.name "robot-unac"
+          git config user.email "robot-unac@users.noreply.github.com"
+          git add data/flights.json
+          git diff --cached --quiet || git commit -m "Vols mis à jour"
+          git push
