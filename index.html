@@ -733,8 +733,9 @@
   }
   const BRIEF_SOON_MIN = 15;  // pastille « imminent » 15 min avant le début du briefing
   const BRIEF_END_MIN = 8;    // pastille « terminé » 8 min après le début du briefing
-  const BRIEF_REMOVE_MIN = 25; // vue au fil de l'eau : le vol quitte le tableau 25 min après la fin du briefing
-  const removedLive = f => { const b = briefingOf(f); return !!b && Date.now() > b.getTime() + (BRIEF_END_MIN + BRIEF_REMOVE_MIN)*60e3; };
+  const BRIEF_REMOVE_MIN = 25;    // vue au fil de l'eau : un vol LC quitte le tableau 25 min après la fin du briefing
+  const BRIEF_REMOVE_MC_MIN = 15; // … un vol MC, 15 min après
+  const removedLive = f => { const b = briefingOf(f); return !!b && Date.now() > b.getTime() + (BRIEF_END_MIN + (f.lc ? BRIEF_REMOVE_MIN : BRIEF_REMOVE_MC_MIN))*60e3; };
   // LC : briefing H−1h30. MC : briefing H−1h10.
   const briefingOf = f => f.sched ? new Date(f.sched.getTime() - (f.lc ? BRIEFING_MIN : BRIEFING_MC_MIN)*60e3) : null;
   function briefState(f){
@@ -866,7 +867,7 @@
       const [label,,kind] = statusOf(f);
       if (kind==="gone") return false;                               // uniquement les vols à venir
       if (!f.lc && isHop(f)) return false;                           // MC : vols HOP du 2G exclus
-      if ((state.view === "live" || state.view === "hub") && removedLive(f)) return false;     // briefing terminé depuis plus de 25 min
+      if ((state.view === "live" || state.view === "hub") && removedLive(f)) return false;     // briefing terminé depuis plus de 25 min (LC) ou 15 min (MC)
       if (parisDay(f.sched) !== bd.day) return false;                // de la journée affichée
       if (state.filter==="next" && (kind==="gone"||kind==="cxl")) return false;
       if (state.filter==="lc" && !f.lc) return false;
@@ -906,7 +907,7 @@
     const pages = [];
     if (state.view === "live"){
       // Au fil de l'eau : pour chaque type de vol, uniquement la plage active (celle du premier vol encore affiché).
-      // Les vols sortent 25 min après la fin de leur briefing ; le suivant de la plage prend la place.
+      // Les vols sortent 25 min (LC) ou 15 min (MC) après la fin de leur briefing ; le suivant de la plage prend la place.
       for (const sec of ["lc","mc"]){
         const fl = list.filter(f => sec === "lc" ? f.lc : !f.lc);
         if (!fl.length) continue;

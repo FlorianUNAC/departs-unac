@@ -20,8 +20,9 @@ if (!KEY) { console.log("Secret AFKL_API_KEY pas encore renseigné : rien à fai
   }
   const BRIEF_SOON_MIN = 15;  // pastille « imminent » 15 min avant le début du briefing
   const BRIEF_END_MIN = 8;    // pastille « terminé » 8 min après le début du briefing
-  const BRIEF_REMOVE_MIN = 25; // vue au fil de l'eau : le vol quitte le tableau 25 min après la fin du briefing
-  const removedLive = f => { const b = briefingOf(f); return !!b && Date.now() > b.getTime() + (BRIEF_END_MIN + BRIEF_REMOVE_MIN)*60e3; };
+  const BRIEF_REMOVE_MIN = 25;    // vue au fil de l'eau : un vol LC quitte le tableau 25 min après la fin du briefing
+  const BRIEF_REMOVE_MC_MIN = 15; // … un vol MC, 15 min après
+  const removedLive = f => { const b = briefingOf(f); return !!b && Date.now() > b.getTime() + (BRIEF_END_MIN + (f.lc ? BRIEF_REMOVE_MIN : BRIEF_REMOVE_MC_MIN))*60e3; };
   // LC : briefing H−1h30. MC : briefing H−1h10.
 
   // Type avion court (A220, A321, B772, B77W, B787, A350…)
