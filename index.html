@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  @font-face{font-family:"Novotype";src:url("fonts/novotype-medium.ttf") format("truetype");font-weight:400 900;font-display:block}
 
   :root{
     /* Charte UNAC : framboise, prune, rose */
@@ -170,7 +169,8 @@
 
   /* ---------- Bandeau UNAC ---------- */
   .ticker{display:flex;align-items:stretch;background:var(--framboise);color:#fff;font-weight:700;font-size:18px;overflow:hidden;white-space:nowrap}
-  .ticker .tag{background:var(--prune);padding:10px 18px;letter-spacing:.12em;text-transform:uppercase;flex:none;z-index:1;font-family:"Novotype",sans-serif;font-weight:500;font-size:22px;letter-spacing:.08em}
+  .ticker .tag{background:var(--prune);padding:10px 18px;letter-spacing:.12em;text-transform:uppercase;flex:none;z-index:1;display:flex;align-items:center}
+  .ticker .tag img{height:16px;width:auto;display:block}
   .ticker .run{flex:1;overflow:hidden;position:relative}
   .ticker .run span{display:inline-block;padding:10px 0 10px 100%;animation:scroll var(--dur,40s) linear infinite}
   @keyframes scroll{to{transform:translateX(-100%)}}
@@ -275,7 +275,7 @@
   <div id="rows"></div>
 </main>
 
-<div class="ticker" id="ticker"><div class="tag">UNAC</div><div class="run"><span id="tickerText"></span></div></div>
+<div class="ticker" id="ticker"><div class="tag"><img src="img/unac-texte.png" alt="UNAC"></div><div class="run"><span id="tickerText"></span></div></div>
 
 <footer>
   <span id="src"><span class="dot"></span>Initialisation…</span>
