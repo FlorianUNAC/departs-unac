@@ -265,6 +265,12 @@
   .hrow .al .afw{width:7.6vw;height:auto;display:block}
   .hrow .al .afs{display:none}
   .hrow .fn{font-weight:400}
+  .hrow .fn .sw{position:relative;display:block;height:1.3em;overflow:hidden}
+  .hrow .fn .s1,.hrow .fn .s2{position:absolute;left:0;top:0;line-height:1.3em;white-space:nowrap;animation:8s ease-in-out infinite;animation-delay:var(--d)}
+  .hrow .fn .s1{animation-name:swA}
+  .hrow .fn .s2{animation-name:swB;font-weight:700;letter-spacing:.02em}
+  @keyframes swA{0%,44%{opacity:1;transform:none}50%,94%{opacity:0;transform:translateY(-70%)}100%{opacity:1;transform:none}}
+  @keyframes swB{0%,44%{opacity:0;transform:translateY(70%)}50%,94%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-70%)}}
   .hrow .ds{font-weight:700}
   .hrow .b{font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
   .hrow .pill2{margin-left:1vw}
@@ -952,6 +958,7 @@
   function renderHub(){
     if (state.view !== "hub") return;
     const list = filtered(), n = hubRowsFit();
+    const swD = -(Date.now() % 8000); // garde l'alternance synchronisée malgré les rafraîchissements
     const fill = (id, arr) => {
       const el = $(id);
       if (!arr.length){ el.innerHTML = `<div class="hnone">${state.mode==="init" ? "Chargement…" : "Aucun départ à venir"}</div>`; return; }
@@ -965,7 +972,7 @@
         const pill = label ? `<span class="pill2 b-${bf.k}">${label}</span>` : "";
         const num = (f.number || "").replace(/\s+/g, "");
         const b = briefingOf(f);
-        return `<div class="hrow" data-i="${i}"><span class="t${late ? " late" : ""}">${hH(late ? f.rev : f.sched)}</span><span class="al"><img class="afw" src="img/air-france-blanc.png" alt="Air France"><img class="afs" src="img/air-france-virgule.png" alt="Air France"></span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
+        return `<div class="hrow" data-i="${i}"><span class="t${late ? " late" : ""}">${hH(late ? f.rev : f.sched)}</span><span class="al"><img class="afw" src="img/air-france-blanc.png" alt="Air France"><img class="afs" src="img/air-france-virgule.png" alt="Air France"></span><span class="fn">${f.ac ? `<span class="sw" style="--d:${swD}ms"><span class="s1">${num}</span><span class="s2">${f.ac}</span></span>` : num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
       }).join("");
       el.querySelectorAll(".hrow").forEach(r => r.onclick = () => showDetail(arr[+r.dataset.i]));
       // Colonne « Briefing PEQ » mise en avant (encart arrondi derrière les horaires)
