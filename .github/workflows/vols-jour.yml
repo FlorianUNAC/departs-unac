@@ -1,0 +1,34 @@
+name: Vols du jour (Daily de la perm)
+
+on:
+  push:
+    paths: ["daily-demande/**"]   # une demande poussée = un relevé des vols du jour indiqué
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vols
+  cancel-in-progress: false
+
+jobs:
+  vols-jour:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Départs et arrivées Air France à CDG
+        env:
+          AFKL_API_KEY: ${{ secrets.AFKL_API_KEY }}
+        run: node scripts/vols-jour.mjs
+      - name: Publier
+        run: |
+          git config user.name "robot-unac"
+          git config user.email "robot-unac@users.noreply.github.com"
+          git add data/vols-jour.json
+          git diff --cached --quiet || git commit -m "Vols du jour pour le Daily"
+          git pull --rebase
+          git push
