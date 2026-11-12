@@ -1026,7 +1026,7 @@
       ["Enregistrement", f.checkIn || "—"],
       ["Appareil", f.aircraft || "—"],
       ["Statut détaillé", f.statusLabel || "—"],
-      ["Source", state.mode==="demo" ? "Simulation (mode démo)" : (state.provider==="afkl" ? "Air France-KLM Open Data" : "AeroDataBox")]
+      ["Source", state.mode==="demo" ? "Simulation (mode démo)" : (state.provider==="hosted" ? "Air France-KLM (données UNAC)" : state.provider==="afkl" ? "Air France-KLM Open Data" : "AeroDataBox")]
     ];
     $("#dKv").innerHTML = rows.map(([k,v])=>`<dt>${k}</dt><dd>${String(v).replace(/</g,"&lt;")}</dd>`).join("");
     $("#mDetail").classList.add("open");
