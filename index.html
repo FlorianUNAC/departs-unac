@@ -265,7 +265,13 @@
   .hrow .ds{font-weight:700}
   .hrow .b{font-weight:700;font-variant-numeric:tabular-nums}
   .hrow .pill2{justify-self:start;font-weight:700;font-size:.95em;padding:.38em .8em;border-radius:.55em;white-space:nowrap}
-  .pill2.ok{background:#1fb51f}.pill2.late{background:#d97a0d}.pill2.cxl{background:#b51d0e}
+  .pill2.b-wait{background:rgba(255,255,255,.16);color:#f3e6ee}
+  .pill2.b-near{background:#ffe07a;color:#3a2a00}
+  .pill2.b-soon{background:#f08a1c;color:#fff;animation:blink 1.1s steps(1) infinite}
+  .pill2.b-on{background:#1fb51f;color:#fff}
+  .pill2.b-done{background:#b39cff;color:#24124a}
+  .pill2.b-cxl{background:#b51d0e;color:#fff}
+  .hrow .t.late{color:#ffb15c}
   .hrow.empty{opacity:.5;cursor:default}
   #hub .hfoot{display:flex;align-items:flex-end;justify-content:center;position:relative;margin-top:2vw}
   #hub .hlogo{width:5.6vw;height:auto}
@@ -943,10 +949,14 @@
       el.innerHTML = arr.slice(0, n).map((f,i) => {
         const [, , kind] = statusOf(f);
         const late = f.rev && f.sched && (f.rev - f.sched) > 5*60e3;
-        const pill = kind === "cxl" ? `<span class="pill2 cxl">Annulé</span>` : late ? `<span class="pill2 late">Retardé</span>` : `<span class="pill2 ok">À l'heure</span>`;
+        // Pastille = état du briefing (comme sur le tableau split-flap)
+        const bf = briefFlap(f, kind);
+        const mins = bf.k === "near" ? bf.text.split(" ")[1] : "";
+        const label = { wait:"À venir", near:`${mins} min`, soon:"Imminent", on:"En cours", done:"Terminé", cxl:"Annulé" }[bf.k] || "";
+        const pill = label ? `<span class="pill2 b-${bf.k}">${label}</span>` : "";
         const num = (f.number || "").replace(/\s+/g, "");
         const b = briefingOf(f);
-        return `<div class="hrow" data-i="${i}"><span class="t">${hH(f.sched)}</span><span class="al"><img class="afw" src="img/air-france-blanc.png" alt="Air France"><img class="afs" src="img/air-france-virgule.png" alt="Air France"></span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
+        return `<div class="hrow" data-i="${i}"><span class="t${late ? " late" : ""}">${hH(late ? f.rev : f.sched)}</span><span class="al"><img class="afw" src="img/air-france-blanc.png" alt="Air France"><img class="afs" src="img/air-france-virgule.png" alt="Air France"></span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
       }).join("");
       el.querySelectorAll(".hrow").forEach(r => r.onclick = () => showDetail(arr[+r.dataset.i]));
     };
