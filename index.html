@@ -265,7 +265,7 @@
     <div>Heure</div>
     <div>Porte</div>
     <div>Vol</div>
-    <div>Destination</div>
+    <div id="hdest">Destination</div>
     <div class="h-ac">Avion</div>
     <div></div>
     <div class="h-bst">Briefing PNC<small id="hbriefsub">H−1h30</small></div>
@@ -760,6 +760,7 @@
     n = Math.max(3, Math.min(20, n));
     const want = n < 10 ? 3 : n;                                   // trop étroit : trigramme (CDG, JFK…)
     if (main.style.getPropertyValue("--destcols") !== String(want)) main.style.setProperty("--destcols", want);
+    $("#hdest").textContent = want < 10 ? "Dest." : "Destination";
     return want;
   }
   function rowsPerPage(){
@@ -833,7 +834,7 @@
     const box = $("#rows");
 
     if (!list.length){
-      box.innerHTML = `<div class="empty">${state.mode==="init" ? "Chargement des vols…" : "Aucun vol à venir ne correspond à ces critères."}</div>`;
+      box.innerHTML = `<div class="empty">${state.mode==="init" ? "Chargement des vols…" : (!state.flights.length ? "En attente des premières données Air France-KLM…" : "Aucun vol à venir ne correspond à ces critères.")}</div>`;
     } else {
       if (box.querySelector(".empty")) box.innerHTML = "";
       while (box.children.length < per) {
