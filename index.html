@@ -14,7 +14,7 @@
 <title>UNAC · Départs Air France · Paris-CDG</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
   :root{
@@ -240,9 +240,60 @@
     #count{display:none}
   }
   @media (max-width:380px){ .grid{column-gap:4px} .row{padding:7px 6px} }
+  /* ---------- Vue « Prochains départs hub » ---------- */
+  #hub{display:none}
+  body.hubview > header, body.hubview > main, body.hubview > .ticker{display:none}
+  body.hubview{background:linear-gradient(135deg,#8a3060 0%,#5e1d42 45%,#3f1230 100%);background-attachment:fixed}
+  body.hubview #hub{display:flex;flex-direction:column;flex:1;min-height:100vh;padding:4.4vw 3.8vw 2.6vw;position:relative;font-family:Inter,system-ui,sans-serif;color:#fff}
+  #hub h1{font-size:2.1vw;font-weight:700;letter-spacing:-.01em}
+  #hub h1 span{font-weight:400}
+  #hub .hplane{position:absolute;right:0;top:2.2vw;width:19vw;filter:drop-shadow(0 .4vw .8vw rgba(0,0,0,.25))}
+  #hub .cols{display:grid;grid-template-columns:1fr 1fr;gap:3.6vw;margin-top:6.2vw;flex:1}
+  #hub h2{font-family:Inter,sans-serif;font-size:2.6vw;font-weight:800;margin-bottom:1.6vw}
+  #hub .hrows{display:flex;flex-direction:column;gap:1.05vw}
+  .hrow{display:grid;grid-template-columns:5.8vw 8.8vw 6.2vw 4.6vw 6.2vw auto;align-items:center;font-size:1.24vw;min-height:2.75vw;cursor:pointer}
+  .hrow .t{font-weight:700;font-variant-numeric:tabular-nums}
+  .hrow .t sup,.hrow .b sup{font-size:.55em;vertical-align:.6em;margin:0 .05em;font-weight:700}
+  .hrow .al{font-weight:800;letter-spacing:.08em;font-size:.88em;white-space:nowrap}
+  .hrow .fn{font-weight:400}
+  .hrow .ds{font-weight:700}
+  .hrow .b{font-weight:700;font-variant-numeric:tabular-nums}
+  .hrow .pill2{justify-self:start;font-weight:700;font-size:.95em;padding:.38em .8em;border-radius:.55em;white-space:nowrap}
+  .pill2.ok{background:#1fb51f}.pill2.late{background:#d97a0d}.pill2.cxl{background:#b51d0e}
+  .hrow.empty{opacity:.5;cursor:default}
+  #hub .hfoot{display:flex;align-items:flex-end;justify-content:center;position:relative;margin-top:2vw}
+  #hub .hlogo{width:5.6vw;height:auto}
+  #hub .hclock2{position:absolute;right:0;bottom:.6vw;background:rgba(255,255,255,.18);border-radius:.9vw;padding:.7vw 1.5vw;font-size:1.55vw;font-weight:700;font-variant-numeric:tabular-nums}
+  #hub .hnone{font-size:1.2vw;opacity:.7}
+  #hub .hubgear{position:absolute;left:0;bottom:.6vw;align-self:auto;margin:0}
+  @media (max-width:760px){
+    body.hubview #hub{padding:max(18px, env(safe-area-inset-top)) 14px 14px}
+    #hub h1{font-size:22px}
+    #hub h1{padding-right:118px;line-height:1.15}
+    #hub .hplane{width:112px;top:max(14px, env(safe-area-inset-top))}
+    #hub .cols{grid-template-columns:1fr;gap:26px;margin-top:30px;flex:none}
+    #hub .hfoot{margin-top:28px}
+    #hub h2{font-size:24px;margin-bottom:10px}
+    #hub .hrows{gap:9px}
+    .hrow{grid-template-columns:54px 62px 40px 52px 1fr;font-size:15px;min-height:30px}
+    .hrow .al{display:none}
+    #hub .hlogo{width:54px}
+    #hub .hclock2{font-size:16px;padding:6px 12px;border-radius:10px}
+    #hub .hnone{font-size:14px}
+  }
+  @media (max-width:380px){ .hrow{grid-template-columns:46px 54px 34px 44px 1fr;font-size:13px} }
 </style>
 </head>
 <body>
+<div id="hub" aria-label="Prochains départs hub">
+  <h1>Prochains départs <span>hub</span></h1>
+  <img class="hplane" src="img/avion-unac.png" alt="">
+  <div class="cols">
+    <section><h2>LC</h2><div class="hrows" id="hubLC"></div></section>
+    <section><h2>MC</h2><div class="hrows" id="hubMC"></div></section>
+  </div>
+  <div class="hfoot"><button class="gear hubgear" id="hubGear" aria-label="Options d'affichage"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button><img class="hlogo" src="img/logo-unac-blanc.png" alt="UNAC"><div class="hclock2" id="hubClock">--:--</div></div>
+</div>
 
 <header>
   <div class="plane img" id="logoBox"><img src="img/avion-unac.png" alt="Avion UNAC"></div>
@@ -268,7 +319,8 @@
     <select id="term"><option value="">Tous terminaux</option></select>
   </div>
   <select id="viewSel">
-    <option value="live">Vue au fil de l'eau (plage en cours)</option>
+    <option value="hub">Vue « Prochains départs hub » (LC et MC côte à côte)</option>
+    <option value="live">Vue split-flap au fil de l'eau (plage en cours)</option>
     <option value="day">Vue journée complète, plage par plage</option>
   </select>
   <select id="plageSel"></select>
@@ -377,7 +429,7 @@
     key: store.get("afcdg.key", ""),
     interval: [30,45,60,90].includes(+store.get("afcdg.interval", "45")) ? +store.get("afcdg.interval", "45") : 45,
     lastFull: 0,
-    view: (()=>{ try { return localStorage.getItem("afcdg.view") || "live"; } catch { return "live"; } })(),
+    view: (()=>{ try { return localStorage.getItem("afcdg.view2") || "hub"; } catch { return "hub"; } })(),
     mode: "init",          // live | demo | error
     flights: [],
     lastUpdate: null,
@@ -396,7 +448,7 @@
   const fmtClock = new Intl.DateTimeFormat("fr-FR",{timeZone:TZ,hour:"2-digit",minute:"2-digit",second:"2-digit"});
   const fmtDate  = new Intl.DateTimeFormat("fr-FR",{timeZone:TZ,weekday:"long",day:"numeric",month:"long",year:"numeric"});
   const fmtHM    = new Intl.DateTimeFormat("fr-FR",{timeZone:TZ,hour:"2-digit",minute:"2-digit"});
-  function tick(){ const n=new Date(); flapCell($("#clock"), fmtHM.format(n), 5); $("#date").textContent=fmtDate.format(n); }
+  function tick(){ const n=new Date(); flapCell($("#clock"), fmtHM.format(n), 5); $("#date").textContent=fmtDate.format(n); const hc=$("#hubClock"); if (hc) hc.textContent=fmtHM.format(n); }
 
   /* Chaîne "YYYY-MM-DDTHH:mm" à l'heure de Paris */
   function parisLocal(d){
@@ -775,7 +827,7 @@
       const [label,,kind] = statusOf(f);
       if (kind==="gone") return false;                               // uniquement les vols à venir
       if (!f.lc && isHop(f)) return false;                           // MC : vols HOP du 2G exclus
-      if (state.view === "live" && removedLive(f)) return false;     // briefing terminé depuis plus de 25 min
+      if ((state.view === "live" || state.view === "hub") && removedLive(f)) return false;     // briefing terminé depuis plus de 25 min
       if (parisDay(f.sched) !== bd.day) return false;                // de la journée affichée
       if (state.filter==="next" && (kind==="gone"||kind==="cxl")) return false;
       if (state.filter==="lc" && !f.lc) return false;
@@ -863,6 +915,35 @@
     }).join("");
     if (sel.dataset.sig !== opts){ sel.innerHTML = opts; sel.dataset.sig = opts; }
   }
+  /* ---------- Vue « Prochains départs hub » ---------- */
+  const hH = d => { const t = fmtHM.format(d).split(":"); return `${t[0]}<sup>H</sup>${t[1]}`; };
+  function hubRowsFit(){
+    const box = $("#hubLC"); if (!box) return 6;
+    const top = box.getBoundingClientRect().top, foot = $("#hub .hfoot").getBoundingClientRect().height + 30;
+    const rowH = (window.innerWidth <= 760 ? 39 : window.innerWidth * 0.038);
+    const avail = window.innerWidth <= 760 ? 6 * rowH : window.innerHeight - top - foot;
+    return Math.max(3, Math.min(12, Math.floor(avail / rowH)));
+  }
+  function renderHub(){
+    if (state.view !== "hub") return;
+    const list = filtered(), n = hubRowsFit();
+    const fill = (id, arr) => {
+      const el = $(id);
+      if (!arr.length){ el.innerHTML = `<div class="hnone">${state.mode==="init" ? "Chargement…" : "Aucun départ à venir"}</div>`; return; }
+      el.innerHTML = arr.slice(0, n).map((f,i) => {
+        const [, , kind] = statusOf(f);
+        const late = f.rev && f.sched && (f.rev - f.sched) > 5*60e3;
+        const pill = kind === "cxl" ? `<span class="pill2 cxl">Annulé</span>` : late ? `<span class="pill2 late">Retardé</span>` : `<span class="pill2 ok">À l'heure</span>`;
+        const num = (f.number || "").replace(/\s+/g, "");
+        const b = briefingOf(f);
+        return `<div class="hrow" data-i="${i}"><span class="t">${hH(f.sched)}</span><span class="al">AIR FRANCE</span><span class="fn">${num}</span><span class="ds">${f.destIata || ""}</span><span class="b">${b ? hH(b) : ""}</span>${pill}</div>`;
+      }).join("");
+      el.querySelectorAll(".hrow").forEach(r => r.onclick = () => showDetail(arr[+r.dataset.i]));
+    };
+    fill("#hubLC", list.filter(f => f.lc));
+    fill("#hubMC", list.filter(f => !f.lc));
+  }
+
   function render(){
     const list = filtered(), per = rowsPerPage();
     const pagesArr = buildPages(list, per);
@@ -922,6 +1003,7 @@
     if (pages > 1) for (let i=0;i<pages;i++){ const d=document.createElement("i"); if(i===state.page) d.className="on"; d.title=pagesArr[i] ? `Plage ${pagesArr[i].plage.n} ${pagesArr[i].sec.toUpperCase()}${pagesArr[i].parts>1?" ("+pagesArr[i].part+"/"+pagesArr[i].parts+")":""}` : ""; d.style.cursor="pointer"; d.onclick=()=>{state.page=i;render();}; pg.appendChild(d); }
 
     const live = state.flights.filter(f=>statusOf(f)[2]!=="gone").length;
+    renderHub();
     $("#count").textContent = `${list.length} départ(s) à venir ${boardDay().tomorrow ? "demain" : "aujourd'hui"}`;
     const src = $("#src");
     $("footer").classList.toggle("alert", state.mode === "error" || state.mode === "stale");
@@ -1050,8 +1132,9 @@
   $("#plageSel").style.display = state.view === "day" ? "" : "none";
   $("#viewSel").addEventListener("change", e=>{
     state.view = e.target.value; state.page = 0;
-    try { localStorage.setItem("afcdg.view", state.view); } catch {}
+    try { localStorage.setItem("afcdg.view2", state.view); } catch {}
     $("#plageSel").style.display = state.view === "day" ? "" : "none";
+    document.body.classList.toggle("hubview", state.view === "hub");
     render();
   });
   $("#plageSel").addEventListener("change", e=>{
@@ -1061,8 +1144,9 @@
     e.target.value = "";
   });
   /* Menu d'options discret */
-  function openMenu(){ const r = $("#gear").getBoundingClientRect(); $("#menu").style.top = (r.bottom + 10) + "px"; $("#menu").classList.add("open"); $("#menu").setAttribute("aria-hidden","false"); $("#gear").setAttribute("aria-expanded","true"); }
+  function openMenu(){ $("#menu").style.bottom = ""; $("#menu").style.left = ""; $("#menu").style.right = ""; const r = $("#gear").getBoundingClientRect(); $("#menu").style.top = (r.bottom + 10) + "px"; $("#menu").classList.add("open"); $("#menu").setAttribute("aria-hidden","false"); $("#gear").setAttribute("aria-expanded","true"); }
   function closeMenu(){ $("#menu").classList.remove("open"); $("#menu").setAttribute("aria-hidden","true"); $("#gear").setAttribute("aria-expanded","false"); }
+  $("#hubGear").onclick = e=>{ e.stopPropagation(); $("#menu").classList.contains("open") ? closeMenu() : (openMenu(), $("#menu").style.top = "auto", $("#menu").style.bottom = "80px", $("#menu").style.right = "auto", $("#menu").style.left = "24px"); };
   $("#gear").onclick = e=>{ e.stopPropagation(); $("#menu").classList.contains("open") ? closeMenu() : openMenu(); };
   document.addEventListener("click", e=>{ if ($("#menu").classList.contains("open") && !$("#menu").contains(e.target)) closeMenu(); });
   document.addEventListener("keydown", e=>{
@@ -1114,6 +1198,7 @@
   let idle; const wake=()=>{ document.body.style.cursor=""; document.body.classList.remove("idle"); clearTimeout(idle);
     idle=setTimeout(()=>{ if ($("#menu").classList.contains("open")) return; document.body.style.cursor="none"; document.body.classList.add("idle"); },4000); };
   document.addEventListener("mousemove", wake); wake();
+  document.body.classList.toggle("hubview", state.view === "hub");
   applyBrand();
   if ("serviceWorker" in navigator && location.protocol === "https:") { try { navigator.serviceWorker.register("sw.js"); } catch {} }
   setInterval(tick,1000); tick();
