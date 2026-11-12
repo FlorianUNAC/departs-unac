@@ -26,7 +26,7 @@
     --line:#4a1d42;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{overflow-x:hidden;height:100%;background:var(--bg);color:var(--white);font-family:"UNAC","SFR",Inter,system-ui,sans-serif}
+  html,body{overflow-x:hidden;height:100%;background:var(--bg);color:var(--white);font-family:"UNAC",Inter,system-ui,sans-serif}
   body{display:flex;flex-direction:column;min-height:100vh}
 
   /* ---------- Header ---------- */
@@ -241,12 +241,12 @@
   }
   @media (max-width:380px){ .grid{column-gap:4px} .row{padding:7px 6px} }
   /* ---------- Vue « Prochains départs hub » ---------- */
-  @font-face{font-family:"UNAC Texte";src:url("fonts/sfr-r.woff2") format("woff2");font-weight:400;font-display:swap}
-  @font-face{font-family:"UNAC Texte";src:url("fonts/sfr-b.woff2") format("woff2");font-weight:700 800;font-display:swap}
+  @font-face{font-family:"T1";src:url("assets/x1.woff2") format("woff2");font-weight:400;font-display:swap}
+  @font-face{font-family:"T1";src:url("assets/x2.woff2") format("woff2");font-weight:700 800;font-display:swap}
   #hub{display:none}
   body.hubview > header, body.hubview > main, body.hubview > .ticker{display:none}
   body.hubview{background:linear-gradient(72deg,#8f4060 0%,#7b2f4e 26%,#68243f 52%,#5a2039 76%,#552137 100%);background-attachment:fixed}
-  body.hubview #hub{display:flex;flex-direction:column;flex:1;min-height:100vh;padding:4.4vw 3.8vw 2.6vw;position:relative;overflow:hidden;font-family:"UNAC Texte",Inter,system-ui,sans-serif;color:#fff}
+  body.hubview #hub{display:flex;flex-direction:column;flex:1;min-height:100vh;padding:4.4vw 3.8vw 2.6vw;position:relative;overflow:hidden;font-family:"T1",Inter,system-ui,sans-serif;color:#fff}
   #hub h1{font-size:2.1vw;font-weight:700;letter-spacing:-.01em}
   #hub h1 span{font-weight:400}
   #hub .ttl{height:2.25vw;width:auto;display:block}
