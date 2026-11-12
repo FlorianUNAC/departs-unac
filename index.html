@@ -2,7 +2,15 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#C8175D">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Départs UNAC">
 <title>UNAC · Départs Air France · Paris-CDG</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,6 +56,9 @@
   .hsub .day{background:var(--rose);color:var(--prune);font-size:10px;font-weight:800;letter-spacing:.12em;padding:3px 7px;border-radius:4px}
 
   /* ---------- Toolbar ---------- */
+  /* ---------- Appli installée : zones de sécurité (encoche, barre d'accueil) ---------- */
+  header{padding-top:max(18px, env(safe-area-inset-top));padding-left:max(28px, env(safe-area-inset-left));padding-right:max(28px, env(safe-area-inset-right))}
+  footer{padding-bottom:max(12px, env(safe-area-inset-bottom))}
   /* ---------- Bouton options discret + menu ---------- */
   header{position:relative}
   .gear{position:relative;align-self:flex-start;margin-left:6px;width:30px;height:30px;border-radius:50%;border:0;background:transparent;color:#fff;opacity:.28;cursor:pointer;display:grid;place-items:center;transition:opacity .2s,background .2s}
@@ -203,7 +214,7 @@
   @media (max-width:1000px){
     :root{--fs:clamp(10px,1.45vw,13px)}
     .grid{column-gap:8px}
-    header{padding:12px 14px;gap:12px}main,footer{padding-left:12px;padding-right:12px}
+    header{padding:max(12px, env(safe-area-inset-top)) 14px 12px;gap:12px}main,footer{padding-left:12px;padding-right:12px}
     .title h1{font-size:20px}.title p{display:none}
     .hclock{--fs:20px}.hsec,.hpl{--fs:14px}.hsub{display:none}
     .plane{height:40px;min-width:0}.plane.img img{height:40px}
@@ -211,10 +222,24 @@
     .row{padding:6px 10px}.head{padding:0 10px 8px}
   }
   @media (max-width:640px){
+    :root{--fs:clamp(9px,2.7vw,14px)}
     .c-ac,.h-ac{display:none}
-    .grid{grid-template-columns:calc(var(--fw)*5) calc(var(--fw)*4) calc(var(--fw)*7) calc(var(--fw)*var(--destcols,3)) calc(var(--fw)*1) calc(var(--fw)*14)}
-    .hflap{display:none}
+    .grid{grid-template-columns:calc(var(--fw)*5) calc(var(--fw)*4) calc(var(--fw)*7) calc(var(--fw)*var(--destcols,3)) calc(var(--fw)*1) calc(var(--fw)*5);column-gap:6px}
+    header{flex-wrap:wrap;row-gap:10px;padding:max(10px, env(safe-area-inset-top)) 12px 10px}
+    .title{display:none}
+    .plane.img img{height:30px}
+    .clock{margin-left:auto}.clock .d{display:none}.hclock{--fs:18px}
+    .gear{display:none}
+    .hflap{order:3;flex-basis:100%;margin-left:0}
+    .hsec,.hpl{--fs:15px}
+    .hsub{display:flex;font-size:11px}
+    .head{font-size:10px;letter-spacing:.08em}.head small{display:none}
+    .row{padding:7px 8px}
+    .ticker{font-size:13px}.ticker .tag{padding:8px 12px}.ticker .tag img{height:11px}.ticker .run span{padding:8px 0 8px 100%}
+    footer{font-size:11px;gap:10px}
+    #count{display:none}
   }
+  @media (max-width:380px){ .grid{column-gap:4px} .row{padding:7px 6px} }
 </style>
 </head>
 <body>
@@ -768,13 +793,14 @@
     const gap = parseFloat(getComputedStyle(head).columnGap) || 20;
     const acVisible = getComputedStyle(head.querySelector(".h-ac")).display !== "none";
     const cols = acVisible ? 7 : 6;
-    const others = 5 + 4 + 7 + (acVisible ? 4 : 0) + 1 + 14;
-    const avail = $("#rows").clientWidth - (window.innerWidth <= 1000 ? 24 : 36);                      // padding + bordure des lignes
+    const others = 5 + 4 + 7 + (acVisible ? 4 : 0) + 1 + (window.innerWidth <= 640 ? 5 : 14);
+    const avail = $("#rows").clientWidth - (window.innerWidth <= 640 ? 20 : window.innerWidth <= 1000 ? 24 : 36);                      // padding + bordure des lignes
     let n = Math.floor((avail - (cols - 1) * gap) / fwPx) - others;
     n = Math.max(3, Math.min(20, n));
     const want = n < 10 ? 3 : n;                                   // trop étroit : trigramme (CDG, JFK…)
     if (main.style.getPropertyValue("--destcols") !== String(want)) main.style.setProperty("--destcols", want);
     $("#hdest").textContent = want < 10 ? "Dest." : "Destination";
+    $(".h-bst").firstChild.textContent = window.innerWidth <= 640 ? "Brief." : "Briefing PNC";
     return want;
   }
   function rowsPerPage(){
@@ -887,7 +913,8 @@
         r.children[5].className = "c-dot k-" + bf.k;
         r.children[5].style.visibility = bf.text ? "" : "hidden";
         r.children[6].className = "cell c-bst k-" + bf.k;
-        flapCell(r.children[6], bf.text, 14);
+        const mobile = window.innerWidth <= 640;
+        flapCell(r.children[6], mobile ? (bf.k === "cxl" ? "ANNUL" : bf.text.slice(0,5)) : bf.text, mobile ? 5 : 14);
       });
     }
 
@@ -1088,6 +1115,7 @@
     idle=setTimeout(()=>{ if ($("#menu").classList.contains("open")) return; document.body.style.cursor="none"; document.body.classList.add("idle"); },4000); };
   document.addEventListener("mousemove", wake); wake();
   applyBrand();
+  if ("serviceWorker" in navigator && location.protocol === "https:") { try { navigator.serviceWorker.register("sw.js"); } catch {} }
   setInterval(tick,1000); tick();
   render();
   load();
