@@ -246,12 +246,12 @@
   #hub{display:none}
   body.hubview > header, body.hubview > main, body.hubview > .ticker{display:none}
   body.hubview{background:linear-gradient(135deg,#8a3060 0%,#5e1d42 45%,#3f1230 100%);background-attachment:fixed}
-  body.hubview #hub{display:flex;flex-direction:column;flex:1;min-height:100vh;padding:4.4vw 3.8vw 2.6vw;position:relative;font-family:"UNAC Texte",Inter,system-ui,sans-serif;color:#fff}
+  body.hubview #hub{display:flex;flex-direction:column;flex:1;min-height:100vh;padding:4.4vw 3.8vw 2.6vw;position:relative;overflow:hidden;font-family:"UNAC Texte",Inter,system-ui,sans-serif;color:#fff}
   #hub h1{font-size:2.1vw;font-weight:700;letter-spacing:-.01em}
   #hub h1 span{font-weight:400}
   #hub .ttl{height:2.6vw;width:auto;display:block}
   #hub .ttl2{height:2.1vw;width:auto;display:block}
-  #hub .hplane{position:absolute;right:0;top:2.2vw;width:19vw;filter:drop-shadow(0 .4vw .8vw rgba(0,0,0,.25))}
+  #hub .hplane{position:absolute;right:-2.8vw;top:2vw;width:22vw;filter:drop-shadow(0 .4vw .8vw rgba(0,0,0,.25))}
   #hub .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3.6vw;margin-top:6.2vw;flex:1}
   #hub h2{font-family:Inter,sans-serif;font-size:2.6vw;font-weight:800;margin-bottom:1.6vw}
   #hub .hrows{display:flex;flex-direction:column;gap:1.05vw;position:relative}
@@ -307,7 +307,7 @@
     #hub h1{padding-right:118px;line-height:1.15}
     #hub .ttl{height:auto;width:100%;max-width:240px}
     #hub .ttl2{height:20px}
-    #hub .hplane{width:112px;top:max(14px, env(safe-area-inset-top))}
+    #hub .hplane{width:130px;right:-16px;top:max(14px, env(safe-area-inset-top))}
     #hub .cols{grid-template-columns:1fr;gap:26px;margin-top:30px;flex:none}
     #hub .hfoot{margin-top:28px}
     #hub h2{font-size:24px;margin-bottom:10px}
