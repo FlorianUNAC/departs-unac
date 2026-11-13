@@ -28,6 +28,10 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{overflow-x:hidden;height:100%;background:var(--bg);color:var(--white);font-family:"UNAC",Inter,system-ui,sans-serif}
   body{display:flex;flex-direction:column;min-height:100vh}
+  /* Pas de barre de défilement visible (TV Samsung, navigateurs PC) — le défilement reste possible au doigt */
+  html,body{scrollbar-width:none;-ms-overflow-style:none}
+  html::-webkit-scrollbar,body::-webkit-scrollbar,*::-webkit-scrollbar{width:0;height:0;display:none}
+  @media (min-width:761px){ html:has(body.hubview),body.hubview{overflow:hidden} }
 
   /* ---------- Header ---------- */
   header{display:flex;align-items:center;gap:24px;padding:18px 28px;background:linear-gradient(100deg,var(--framboise) 0%,#9c1a58 45%,var(--prune) 100%);border-bottom:4px solid var(--rose)}
