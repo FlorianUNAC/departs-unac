@@ -1288,5 +1288,31 @@
   if (!state.key && state.provider !== "hosted") setTimeout(()=> $("#settings").click(), 600);
 })();
 </script>
+<script>
+/* Plein écran automatique sur grand écran (TV) : les navigateurs exigent une action de l'utilisateur,
+   donc la première pression sur la télécommande (ou un clic) bascule en plein écran. */
+(function(){
+  const big = () => window.innerWidth > 760 && !matchMedia("(display-mode: standalone)").matches;
+  const el = document.documentElement;
+  const can = !!(el.requestFullscreen || el.webkitRequestFullscreen);
+  const isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  if (!can) return;
+  const hint = document.createElement("div");
+  hint.id = "fsHint"; hint.textContent = "Appuyez sur OK pour le plein écran";
+  hint.style.cssText = "position:fixed;left:50%;bottom:7vh;transform:translateX(-50%);z-index:99;background:rgba(0,0,0,.45);color:#fff;font:600 1.05vw 'T1',system-ui,sans-serif;padding:.7em 1.3em;border-radius:2em;transition:opacity .6s;pointer-events:none";
+  const show = () => { if (big() && !isFs()) { document.body.appendChild(hint); hint.style.opacity = 1; clearTimeout(show.t); show.t = setTimeout(() => hint.style.opacity = 0, 8000); } };
+  const go = e => {
+    if (!big() || isFs()) return;
+    if (e && e.target && e.target.closest && e.target.closest("#fs")) return; // le bouton plein écran gère lui-même
+    if (e && e.type === "keydown" && (e.key === "f" || e.key === "F")) return;
+    try { const r = (el.requestFullscreen || el.webkitRequestFullscreen).call(el, { navigationUI: "hide" }); if (r && r.catch) r.catch(() => {}); } catch(e) {}
+    hint.style.opacity = 0;
+  };
+  ["keydown","pointerdown","click","touchend"].forEach(ev => addEventListener(ev, go, { capture:true }));
+  try { const r = el.requestFullscreen && el.requestFullscreen(); if (r && r.catch) r.catch(() => {}); } catch(e) {}
+  addEventListener("load", () => setTimeout(show, 1500));
+  document.addEventListener("fullscreenchange", () => { if (!isFs()) show(); });
+})();
+</script>
 </body>
 </html>
