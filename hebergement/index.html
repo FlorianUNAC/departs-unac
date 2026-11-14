@@ -149,6 +149,43 @@
   .fin.withimg .appli{position:absolute;left:0;bottom:0}
   .fin .vis{position:absolute;right:96px;bottom:-44px;height:350px;max-width:420px;object-fit:contain;object-position:bottom}
 
+
+  /* Import de notes */
+  .importbtn{width:100%;display:flex;gap:12px;align-items:center;text-align:left;border:0;cursor:pointer;margin-bottom:12px;padding:13px 14px;border-radius:14px;color:#fff;background:linear-gradient(100deg,#a8376a,#7a2a4e)}
+  .importbtn svg{width:26px;height:26px;flex:none}
+  .importbtn b{display:block;font-size:14.5px}
+  .importbtn small{display:block;font-size:12px;opacity:.85;margin-top:2px}
+  .modal{position:fixed;inset:0;background:rgba(30,6,20,.55);display:none;align-items:center;justify-content:center;z-index:80;padding:16px}
+  .modal.on{display:flex}
+  .mbox{background:#fff;border-radius:16px;width:min(920px,100%);max-height:92vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .mhead{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--ui-line)}
+  .mhead h3{font-size:16px}
+  .mclose{border:0;background:none;font-size:26px;line-height:1;cursor:pointer;color:var(--ui-muted)}
+  .mbody{overflow:auto;padding:16px 18px;flex:1}
+  .mfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 18px;border-top:1px solid var(--ui-line)}
+  .mbtn{border:1px solid var(--ui-line);background:#fff;border-radius:9px;padding:9px 14px;font-weight:700;cursor:pointer}
+  .mbtn.pri{background:#9b2f60;border-color:#9b2f60;color:#fff}
+  .mintro{font-size:13.5px;color:#5d4252;line-height:1.45;margin-bottom:14px}
+  .drop{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px dashed #d9b3c5;background:#fdf7fa;border-radius:14px;padding:22px;cursor:pointer;color:#8a2b57;text-align:center}
+  .drop.hov{background:var(--rosepale);border-color:#b0386c}
+  .drop svg{width:34px;height:34px}
+  .drop span{font-size:12px;color:var(--ui-muted)}
+  .or{text-align:center;font-size:12px;color:var(--ui-muted);margin:12px 0 8px}
+  .merr{margin-top:10px;background:#fff4ec;color:#9a3f17;border-radius:9px;padding:10px 12px;font-size:13px;line-height:1.4}
+  .mbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#faf5f8;border-radius:10px;padding:9px 12px;margin-bottom:10px;font-size:13.5px}
+  .mbar select{width:auto;padding:5px 8px;font-size:13px}
+  .pre{margin-bottom:12px}
+  .pre .chk{margin:0 0 6px}
+  .ilist{display:flex;flex-direction:column}
+  .irow{display:grid;grid-template-columns:22px 86px 1fr;gap:10px;align-items:start;padding:10px 0;border-bottom:1px dashed var(--ui-line)}
+  .irow .ion{margin-top:10px;width:17px;height:17px;accent-color:#b0386c}
+  .icode input{text-align:center;font-weight:700;letter-spacing:.06em;padding:8px 4px}
+  .icode small{display:block;text-align:center;font-size:11px;color:var(--ui-muted);margin-top:3px;line-height:1.2}
+  .ibody{display:flex;flex-direction:column;gap:6px}
+  .ibody select{font-size:12.5px;padding:5px 8px;color:#7a5a6c}
+  .ibody textarea{font-size:13.5px;min-height:48px}
+  @media print{.modal{display:none!important}}
+
   /* ================= Impression / PDF ================= */
   @page{size:A4;margin:0}
   @media print{
@@ -191,6 +228,8 @@
     <div class="menu" id="menu">
       <button class="btn ghost" id="menuBtn" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg><span class="lg">Brouillon</span></button>
       <div class="dd">
+        <button id="aImport"><div>Importer des notes (PDF, Word, texte)<small>Extraction automatique des trigrammes et des textes.</small></div></button>
+        <hr>
         <button id="aShare"><div>Copier le lien de partage<small>Le brouillon est contenu dans le lien : à envoyer à un autre délégué.</small></div></button>
         <button id="aSave"><div>Enregistrer le brouillon (.json)<small>Fichier à conserver ou à transmettre.</small></div></button>
         <button id="aOpen"><div>Ouvrir / fusionner un brouillon (.json)<small>Les escales reçues s'ajoutent aux vôtres.</small></div></button>
@@ -278,6 +317,7 @@ function renderForm(){
   const f = $("#form");
   const scroll = f.scrollTop;
   let h = `
+  <button class="importbtn" id="impOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 18v-6M9 14l3-3 3 3"/></svg><span><b>Importer des notes de délégué</b><small>PDF, Word ou texte collé : les escales sont extraites automatiquement</small></span></button>
   <div class="card">
     <h2>Commission hébergement ${type === "LC" ? "long-courrier" : "moyen-courrier"}</h2>
     <div class="row2">
@@ -377,6 +417,7 @@ $("#form").addEventListener("click", ev => {
     const nom = prompt("Nom de la nouvelle zone :"); if(!nom || !nom.trim()) return;
     S.zones.push({id:uid(), nom:nom.trim(), open:true, escales:[{id:uid(),code:"",texte:""}]}); return changed(true);
   }
+  if(ev.target.closest("#impOpen")) return openImport();
   if(ev.target.id === "vAdd") return $("#fileImg").click();
   if(ev.target.id === "vDel"){ S.visuel = null; return changed(true); }
   const b = ev.target.closest("[data-act]"); if(!b) return;
@@ -595,6 +636,7 @@ $("#aSave").addEventListener("click", () => {
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
   a.download = `brouillon-hebergement-${type}-${S.mois}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 });
+$("#aImport").addEventListener("click", () => { menu.classList.remove("open"); openImport(); });
 $("#aOpen").addEventListener("click", () => { menu.classList.remove("open"); $("#fileJson").click(); });
 $("#fileJson").addEventListener("change", async ev => {
   const f = ev.target.files[0]; ev.target.value = ""; if(!f) return;
@@ -694,5 +736,6 @@ function demo(t){
   window.addEventListener("load", renderPreview);
 })();
 </script>
+<script src="import.js"></script>
 </body>
 </html>
