@@ -60,6 +60,8 @@
   /* ---------- Analyse ---------- */
   function parse(text){
     const R = refAll();
+    // Emojis ignorés (pictogrammes, drapeaux, variantes, teintes de peau, liaisons ZWJ, touches 1️⃣)
+    text = text.replace(/[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{1F3FB}-\u{1F3FF}\u{FE0E}\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, "");
     const lines = text.replace(/\u00a0/g," ").split(/\r?\n/).map(l => l.replace(/[ \t]+/g," ").trim());
     const entries = new Map(); const order = [];
     let cur = null, zoneHint = null; const pre = [];
@@ -251,7 +253,7 @@
     collect();
     const mode = (body.querySelector("#impMode")||{}).value || "append";
     const usePre = body.querySelector("#impPre") && body.querySelector("#impPre").checked;
-    if(result.target !== type) setType(result.target);
+    ensureDraft(result.target);
     let n = 0;
     result.list.forEach(e => {
       if(e.on === false || !e.code) return;

@@ -11,6 +11,8 @@ Tableau des départs Air France de CDG avec les horaires de briefing PNC, pour l
 
 - `hebergement/index.html` : générateur du CR mensuel (lien délégués : `florianunac.github.io/departs-unac/hebergement/`). Les délégués saisissent trigramme + texte par zone ; la mise en page A4 (frame UNAC) et la pagination sont automatiques ; bouton « Télécharger le PDF ».
 - Import de notes : PDF (texte), Word .docx ou texte collé → trigrammes / noms de villes et textes extraits dans le navigateur (`hebergement/import.js`, bibliothèques pdf.js et mammoth dans `hebergement/vendor/`), avec écran de vérification avant ajout.
+- Historique : brouillons et CR publiés mémorisés sur l'appareil ; « Publier » fige un CR. Publication pour tous les délégués (dossier `hebergement/publies/`) si un jeton GitHub est configuré sur l'appareil de l'administrateur (Historique → Publication pour tous).
+- `hebergement/globes.js` : globes des titres de zone (Natural Earth 1:110m), zone mise en avant.
 - `hebergement/escales.js` : référentiel des escales par zone (LC et MC), à compléter au besoin.
 - Visuel de fin facultatif : déposer une photo détourée en `img/pnc-hebergement.png` pour qu'elle apparaisse en bas de la dernière page.
 

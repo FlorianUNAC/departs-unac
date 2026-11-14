@@ -129,7 +129,7 @@
 
   /* Zones */
   .zh{position:relative;padding:0 48px;height:30px;display:flex;align-items:center;margin-bottom:12px;flex:none}
-  .zh .globe{position:absolute;left:-17px;top:-2px;width:34px;height:34px}
+  .zh .globe{position:absolute;left:-19px;top:-5px;width:40px;height:40px}
   .zh .zt{font-size:15.5px;font-weight:700;letter-spacing:.01em}
   .zh .zt em{font-style:normal;font-weight:400;opacity:.6;font-size:12px;margin-left:6px}
   .er{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:30px;padding:0 48px;margin-bottom:20px;flex:none}
@@ -186,6 +186,47 @@
   .ibody textarea{font-size:13.5px;min-height:48px}
   @media print{.modal{display:none!important}}
 
+
+  /* Statut / publication / historique */
+  .card h2 .st{float:right;font-size:10.5px;letter-spacing:.08em;background:#f1edf0;color:#7d5a6e;border-radius:999px;padding:2px 9px}
+  .card h2 .st.pub{background:#e3f4ea;color:#23764a}
+  .pubcard{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-top:12px}
+  .pubcard b{display:block;font-size:14px}
+  .pubcard span{display:block;font-size:12px;color:var(--ui-muted);margin-top:2px;line-height:1.35}
+  .pubbtn{background:#23764a;color:#fff}
+  .robanner{background:#e3f4ea;border:1px solid #bfe3cd;border-radius:14px;padding:12px 14px;margin-bottom:12px;color:#1d5c3a}
+  .robanner b{display:block;font-size:14.5px}
+  .robanner span{display:block;font-size:12px;margin-top:2px}
+  .robtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  body.ro .form .card, body.ro .form .zone, body.ro .form .addzone, body.ro .form .importbtn{pointer-events:none;opacity:.6}
+  body.ro .form .zone > header{pointer-events:auto}
+  body.ro .form .zone{pointer-events:auto}
+  body.ro .form .zone .body{pointer-events:none}
+  .htabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+  .htabs button{border:1px solid var(--ui-line);background:#fff;border-radius:999px;padding:6px 14px;font-weight:700;cursor:pointer;color:#7d5a6e}
+  .htabs button.on{background:#7a2a4e;border-color:#7a2a4e;color:#fff}
+  .htabs .gap{flex:1}
+  .htabs .flt button{padding:4px 10px;font-size:12px}
+  .hlist{display:flex;flex-direction:column;gap:8px}
+  .hrow{display:flex;align-items:center;gap:12px;border:1px solid var(--ui-line);border-radius:12px;padding:10px 12px}
+  .hrow.cur{border-color:#c8487f;box-shadow:0 0 0 2px rgba(200,72,127,.12)}
+  .hrow .tb{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#fff;background:#7a2a4e;font-size:13px;letter-spacing:.04em}
+  .hrow .tb.mc{background:#b0386c}
+  .hrow .hi{flex:1;min-width:0}
+  .hrow .hi b{display:block;font-size:14.5px}
+  .hrow .hi span{display:block;font-size:12px;color:var(--ui-muted);margin-top:2px}
+  .hrow .tag{display:inline-block;font-size:10.5px;font-weight:700;border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:1px;background:#f1edf0;color:#7d5a6e}
+  .hrow .tag.all{background:#e3f4ea;color:#23764a}
+  .hrow .tag.cur{background:var(--rosepale);color:#8a2b57}
+  .hrow .hi span.tag{display:inline-block;margin-top:0}
+  .hrow .ha{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .hempty{text-align:center;color:var(--ui-muted);padding:30px 10px;font-size:14px}
+  .ghset{margin-top:14px;border-top:1px solid var(--ui-line);padding-top:12px;font-size:13px}
+  .ghset summary{cursor:pointer;color:#7d5a6e;font-weight:700}
+  .ghset p{color:#5d4252;line-height:1.45;margin:8px 0}
+  .ghset .ghrow{display:flex;gap:8px}
+  @media screen and (max-width:900px){ .hrow{flex-wrap:wrap} .hrow .ha{width:100%;justify-content:flex-start} }
+
   /* ================= Impression / PDF ================= */
   @page{size:A4;margin:0}
   @media print{
@@ -225,12 +266,14 @@
   <div class="sp"></div>
   <div class="acts" style="display:flex;gap:8px;align-items:center">
     <div class="seg" id="seg"><button data-t="LC">LC</button><button data-t="MC">MC</button></div>
+    <button class="btn ghost" id="histBtn" title="Comptes rendus publiés et brouillons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg><span class="lg">Historique</span></button>
     <button class="btn ghost" id="resetBtn" title="Effacer le compte rendu en cours et repartir d'une page vierge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span class="lg">Recommencer</span></button>
     <div class="menu" id="menu">
       <button class="btn ghost" id="menuBtn" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg><span class="lg">Brouillon</span></button>
       <div class="dd">
         <button id="aImport"><div>Importer des notes (PDF, Word, texte)<small>Extraction automatique des trigrammes et des textes.</small></div></button>
         <hr>
+        <button id="aPublish"><div>Publier ce compte rendu<small>Il passe dans « Publiés » et n'est plus modifiable.</small></div></button>
         <button id="aShare"><div>Copier le lien de partage<small>Le brouillon est contenu dans le lien : à envoyer à un autre délégué.</small></div></button>
         <button id="aSave"><div>Enregistrer le brouillon (.json)<small>Fichier à conserver ou à transmettre.</small></div></button>
         <button id="aOpen"><div>Ouvrir / fusionner un brouillon (.json)<small>Les escales reçues s'ajoutent aux vôtres.</small></div></button>
@@ -254,6 +297,7 @@
 <div class="toast" id="toast"></div>
 
 <script src="escales.js"></script>
+<script src="globes.js"></script>
 <script>
 "use strict";
 const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
@@ -280,14 +324,46 @@ function blank(t){
   return { v:1, type:t, mois:moisDefaut(), aNoter:"", masquerVides:true, tri:"alpha", visuel:null,
     zones:(ESCALES[t]||[]).map(z => ({id:uid(), nom:z.zone, open:false, escales:[]})) };
 }
-function load(t){
-  try{ const raw = localStorage.getItem("crheb:"+t); if(raw){ const o = JSON.parse(raw); if(o && o.zones) return o; } }catch(e){}
-  return blank(t);
+/* Plusieurs comptes rendus mémorisés sur l'appareil : brouillons et publiés */
+const DOCS_KEY = "crheb:docs", CUR_KEY = "crheb:current";
+let DOCS = {};
+function hasContent(d){ return !!(d.aNoter && d.aNoter.trim()) || d.zones.some(z => z.escales.some(e => (e.code||"").trim() || (e.texte||"").trim())); }
+function nbEscales(d){ return d.zones.reduce((a,z) => a + z.escales.filter(e => e.code && (e.texte||"").trim()).length, 0); }
+function fixIds(d){ d.zones.forEach(z => { z.id = z.id || uid(); z.open = !!z.open; z.escales.forEach(e => { e.id = e.id || uid(); e.code = e.code||""; e.texte = e.texte||""; }); }); return d; }
+function newDoc(t){ return Object.assign(blank(t), {id:uid(), statut:"brouillon", cree:Date.now(), maj:Date.now()}); }
+function loadDocs(){
+  try{ DOCS = JSON.parse(localStorage.getItem(DOCS_KEY) || "{}") || {}; }catch(e){ DOCS = {}; }
+  ["LC","MC"].forEach(t => { // reprise des brouillons de la 1re version (un par type)
+    const raw = localStorage.getItem("crheb:"+t); if(!raw) return;
+    try{ const o = JSON.parse(raw); if(o && o.zones && hasContent(o)){ const d = fixIds(Object.assign(o, {id:uid(), statut:"brouillon", cree:Date.now(), maj:Date.now()})); DOCS[d.id] = d; } }catch(e){}
+    localStorage.removeItem("crheb:"+t);
+  });
+}
+function persist(){
+  try{ localStorage.setItem(DOCS_KEY, JSON.stringify(DOCS)); if(S) localStorage.setItem(CUR_KEY, S.id); localStorage.setItem("crheb:type", type); }
+  catch(e){ toast("Mémoire de l'appareil pleine : supprimez d'anciens CR (Historique) ou le visuel"); }
+}
+function latestDraft(t){ return Object.values(DOCS).filter(d => d.type === t && d.statut === "brouillon").sort((a,b) => b.maj - a.maj)[0]; }
+function dropIfEmpty(d){ if(d && d.statut === "brouillon" && !hasContent(d)) delete DOCS[d.id]; }
+function openDoc(d){
+  if(S && S !== d) dropIfEmpty(S);
+  S = d; type = d.type; DOCS[d.id] = d; persist(); refreshAll();
+}
+function refreshAll(){
+  document.querySelectorAll("#seg button").forEach(b => b.classList.toggle("on", b.dataset.t === type));
+  document.body.classList.toggle("ro", S.statut === "publie");
+  renderForm(); renderPreview();
+}
+function ensureDraft(t){ if(S.type !== t || S.statut !== "brouillon") openDoc(latestDraft(t) || newDoc(t)); }
+function replaceContent(o){ // remplace le contenu du brouillon ouvert sans changer son identité
+  const keep = {id:S.id, statut:"brouillon", cree:S.cree, maj:Date.now(), visuel:S.visuel, type:o.type || S.type};
+  S = fixIds(Object.assign(blank(keep.type), JSON.parse(JSON.stringify(o)), keep)); DOCS[S.id] = S; type = S.type;
 }
 let saveT = null;
 function save(){
-  clearTimeout(saveT);
-  saveT = setTimeout(() => { try{ localStorage.setItem("crheb:"+type, JSON.stringify(S)); }catch(e){ toast("Brouillon trop lourd pour être mémorisé (visuel ?)"); } }, 300);
+  if(S.statut === "publie") return;
+  S.maj = Date.now(); DOCS[S.id] = S;
+  clearTimeout(saveT); saveT = setTimeout(persist, 300);
 }
 function changed(structural){
   save();
@@ -317,10 +393,14 @@ function renderForm(){
   const ref = refFor(type);
   const f = $("#form");
   const scroll = f.scrollTop;
-  let h = `
+  const ro = S.statut === "publie";
+  const dt = ts => new Date(ts).toLocaleDateString("fr-FR") + " à " + new Date(ts).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  let h = ro ? `<div class="robanner"><div><b>Compte rendu publié</b><span>${esc(moisLabel(S.mois).replace(/^./, c => c.toUpperCase()))} · publié le ${dt(S.publieLe||S.maj)}${S.partage ? " · visible par tous les délégués" : " · sur cet appareil"}</span></div>
+    <div class="robtns"><button class="mini" id="roCopy">Créer un brouillon à partir de ce CR</button><button class="mini" id="roBack">Revenir à mon brouillon ${type}</button></div></div>` : "";
+  h += `
   <button class="importbtn" id="impOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 18v-6M9 14l3-3 3 3"/></svg><span><b>Importer des notes de délégué</b><small>PDF, Word ou texte collé : les escales sont extraites automatiquement</small></span></button>
   <div class="card">
-    <h2>Commission hébergement ${type === "LC" ? "long-courrier" : "moyen-courrier"}</h2>
+    <h2>Commission hébergement ${type === "LC" ? "long-courrier" : "moyen-courrier"} <span class="st ${ro?"pub":""}">${ro ? "Publié" : "Brouillon"}</span></h2>
     <div class="row2">
       <div><label class="f">Mois</label><select id="fMois">${moisOptions(S.mois)}</select></div>
       <div><label class="f">Ordre des escales</label><select id="fTri"><option value="alpha" ${S.tri==="alpha"?"selected":""}>Alphabétique</option><option value="saisie" ${S.tri==="saisie"?"selected":""}>Ordre de saisie</option></select></div>
@@ -371,7 +451,8 @@ function renderForm(){
       <div class="hint">Photo détourrée (PNG transparent) placée en bas de la dernière page.${defaultVisuelOk && !S.visuel ? " Visuel par défaut utilisé." : ""}</div></div>
     </div>
   </div>
-  <p class="hint" style="margin:14px 4px 0">Saisie enregistrée automatiquement sur cet appareil. Pour travailler à plusieurs : menu « Brouillon » → lien de partage ou fichier .json, puis « fusionner ».</p>`;
+  ${ro ? "" : `<div class="card pubcard"><div><b>Compte rendu terminé ?</b><span>Publiez-le : il passe dans l'historique des CR publiés et n'est plus modifiable.</span></div><button class="btn pubbtn" id="pubBtn">Publier</button></div>`}
+  <p class="hint" style="margin:14px 4px 0">Saisie enregistrée automatiquement sur cet appareil (brouillons et publiés dans « Historique »). Pour travailler à plusieurs : menu « Brouillon » → lien de partage ou fichier .json, puis « fusionner ».</p>`;
   f.innerHTML = h;
   f.scrollTop = scroll;
   const v = S.visuel || (defaultVisuelOk ? VISUEL_DEFAUT : null);
@@ -419,6 +500,9 @@ $("#form").addEventListener("click", ev => {
     S.zones.push({id:uid(), nom:nom.trim(), open:true, escales:[{id:uid(),code:"",texte:""}]}); return changed(true);
   }
   if(ev.target.closest("#impOpen")) return openImport();
+  if(ev.target.id === "pubBtn") return publishCR();
+  if(ev.target.id === "roCopy") return copyToDraft(S);
+  if(ev.target.id === "roBack") return openDoc(latestDraft(type) || newDoc(type));
   if(ev.target.id === "vAdd") return $("#fileImg").click();
   if(ev.target.id === "vDel"){ S.visuel = null; return changed(true); }
   const b = ev.target.closest("[data-act]"); if(!b) return;
@@ -459,11 +543,11 @@ $("#form").addEventListener("click", ev => {
 });
 
 /* ---------------- Rendu de la frame ---------------- */
-const GLOBE = `<svg class="globe" viewBox="0 0 40 40"><defs><radialGradient id="gG" cx="62%" cy="38%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#eadde3"/></radialGradient></defs>
-<circle cx="20" cy="20" r="19" fill="url(#gG)"/>
-<path fill="#b98ea3" d="M21 17.5l3.5-2 4 .6 2.4 1.8 3.2.9-.6 3.6-2.8 2.8-.9 3.9-2.1 4.2-1.9-.8-1-4.4-2-2.6-1.9-3.3zM21.5 8.4l3.6-2 4.6.6 3.4 2.9-3 1.9-3.6-.2-2.2 1.6-2.4-1.1z"/>
-<path fill="#b98ea3" d="M5 11.5l4-3.5 5.5-1.2 2 2-2.6 2.4 1 3-3.4 1.4-1.4 3.6 2.6 3.2-1.3 4.6-2.9.8-1.8-4-1.6-4.4-1.6-3.4z"/>
-<path fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".6" d="M1 20h38M20 1v38"/></svg>`;
+function globeSVG(nom){
+  const g = (window.GLOBES||{})[window.globeFor ? globeFor(nom) : "monde"] || ["",""];
+  return `<svg class="globe" viewBox="0 0 40 40"><defs><radialGradient id="gG" cx="62%" cy="38%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e8dbe1"/></radialGradient></defs>
+<circle cx="20" cy="20" r="19" fill="url(#gG)"/><path fill="#d3bcc8" d="${g[0]}"/><path fill="#a3366a" d="${g[1]}"/><circle cx="20" cy="20" r="19" fill="none" stroke="#fff" stroke-width=".6"/></svg>`;
+}
 const APP_IC = `<svg viewBox="0 0 32 32" fill="none"><rect x="8" y="2.5" width="16" height="27" rx="3.5" fill="#fff"/><rect x="10.3" y="6" width="11.4" height="18" rx="1.2" fill="#C24477"/><path d="M12.3 10.4h7.4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4.3l-2.4 2v-2h-.7a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1z" fill="#fff"/><circle cx="16" cy="26.6" r="1.1" fill="#C24477"/></svg>`;
 const FONDS = [   // variations du fond fourni : cadrage et miroir selon la page
   {pos:"28% 50%", flip:1},
@@ -511,7 +595,7 @@ function zoneEntries(z){
 function rowHTML(items){
   return `<div class="er">${items.map(e => `<div class="en"><span class="pill">${esc(e.code)}</span><div class="tx">${esc(e.texte.trim())}</div></div>`).join("")}</div>`;
 }
-const zhHTML = (nom, suite) => `<div class="zh">${GLOBE}<span class="zt">${esc(nom)}${suite?"<em>(suite)</em>":""}</span></div>`;
+const zhHTML = (nom, suite) => `<div class="zh">${globeSVG(nom)}<span class="zt">${esc(nom)}${suite?"<em>(suite)</em>":""}</span></div>`;
 
 function buildPages(container){
   container.innerHTML = "";
@@ -587,12 +671,13 @@ $("#pdfBtn").addEventListener("click", async () => {
 });
 
 /* ---------------- Type LC / MC ---------------- */
-function setType(t){
-  type = t; localStorage.setItem("crheb:type", t); S = load(t);
-  document.querySelectorAll("#seg button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
-  renderForm(); renderPreview();
+function setType(t){ openDoc(latestDraft(t) || newDoc(t)); }
+function copyToDraft(d){
+  const c = fixIds(Object.assign(JSON.parse(JSON.stringify(d)), {id:uid(), statut:"brouillon", cree:Date.now(), maj:Date.now()}));
+  delete c.publieLe; delete c.partage;
+  openDoc(c); toast("Brouillon créé : vous pouvez le modifier");
 }
-$("#seg").addEventListener("click", e => { const b = e.target.closest("button"); if(b && b.dataset.t !== type) setType(b.dataset.t); });
+$("#seg").addEventListener("click", e => { const b = e.target.closest("button"); if(b && (b.dataset.t !== type || S.statut !== "brouillon")) setType(b.dataset.t); });
 
 /* ---------------- Onglets mobile ---------------- */
 let tab = "saisie";
@@ -605,7 +690,7 @@ $("#menuBtn").addEventListener("click", e => { e.stopPropagation(); menu.classLi
 document.addEventListener("click", e => { if(!menu.contains(e.target)) menu.classList.remove("open"); });
 
 function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("on"), 2600); }
-function exportable(){ const o = JSON.parse(JSON.stringify(S)); delete o.visuel; o.zones.forEach(z => { delete z.open; z.escales = z.escales.filter(e => e.code || e.texte); }); return o; }
+function exportable(d){ const o = JSON.parse(JSON.stringify(d || S)); delete o.id; delete o.statut; delete o.partage; delete o.publieLe; delete o.cree; delete o.maj; delete o.visuel; o.zones.forEach(z => { delete z.open; z.escales = z.escales.filter(e => e.code || e.texte); }); return o; }
 
 async function b64urlDeflate(str){
   const bytes = new TextEncoder().encode(str);
@@ -645,18 +730,20 @@ $("#fileJson").addEventListener("change", async ev => {
 });
 function resetCR(){
   menu.classList.remove("open");
-  if(!confirm(`Recommencer à zéro ?\n\nTout le compte rendu ${type} en cours sera effacé (escales, textes, « À noter », visuel). Pensez à enregistrer le brouillon si besoin.`)) return;
-  S = blank(type); changed(true);
+  if(S.statut === "brouillon" && hasContent(S) && !confirm(`Recommencer à zéro ?\n\nUn nouveau compte rendu ${type} vierge est créé. Le brouillon actuel (${moisLabel(S.mois)}) reste disponible dans « Historique ».`)) return;
+  openDoc(newDoc(type));
   $("#form").scrollTop = 0; tab = "saisie"; syncTab();
   toast(`Nouveau compte rendu ${type} vierge`);
 }
 $("#aReset").addEventListener("click", resetCR);
+$("#histBtn").addEventListener("click", () => openHistory());
+$("#aPublish").addEventListener("click", () => { menu.classList.remove("open"); publishCR(); });
 $("#resetBtn").addEventListener("click", resetCR);
 $("#aDemo").addEventListener("click", () => {
   menu.classList.remove("open");
-  const hasContent = S.zones.some(z => z.escales.some(e => e.texte.trim()));
-  if(hasContent && !confirm("Remplacer le brouillon actuel par l'exemple ?")) return;
-  S = demo(type); changed(true);
+  if(S.statut !== "brouillon") openDoc(newDoc(type));
+  else if(hasContent(S) && !confirm("Remplacer le brouillon actuel par l'exemple ?")) return;
+  replaceContent(demo(type)); changed(true);
 });
 $("#fileImg").addEventListener("change", ev => {
   const f = ev.target.files[0]; ev.target.value = ""; if(!f) return;
@@ -674,15 +761,14 @@ $("#fileImg").addEventListener("change", ev => {
 function incoming(o){
   if(!o || !o.zones){ toast("Brouillon non reconnu"); return; }
   const t = o.type === "MC" ? "MC" : "LC";
-  if(t !== type){ type = t; localStorage.setItem("crheb:type", t); S = load(t); document.querySelectorAll("#seg button").forEach(b => b.classList.toggle("on", b.dataset.t === t)); }
+  ensureDraft(t);
   const mine = S.zones.reduce((a,z) => a + z.escales.filter(e => e.code && e.texte.trim()).length, 0);
   let mode = "replace";
   if(mine){
     mode = confirm(`Vous avez déjà ${mine} escale(s) renseignée(s) en ${t}.\n\nOK = fusionner avec le brouillon reçu\nAnnuler = remplacer par le brouillon reçu`) ? "merge" : "replace";
   }
   if(mode === "replace"){
-    S = Object.assign(blank(t), o, {visuel:S.visuel});
-    S.zones.forEach(z => { z.id = z.id || uid(); z.open = false; z.escales.forEach(e => { e.id = e.id || uid(); e.texte = e.texte||""; }); });
+    replaceContent(Object.assign({}, o, {type:t}));
   } else {
     let add = 0, conflits = 0;
     if(o.aNoter && o.aNoter.trim() && !S.aNoter.includes(o.aNoter.trim())) S.aNoter = (S.aNoter.trim() ? S.aNoter.trim()+"\n" : "") + o.aNoter.trim();
@@ -726,8 +812,12 @@ function demo(t){
 
 /* ---------------- Démarrage ---------------- */
 (async function init(){
-  S = load(type);
+  loadDocs();
+  const cur = DOCS[localStorage.getItem(CUR_KEY)];
+  S = cur || latestDraft(type) || newDoc(type); type = S.type; DOCS[S.id] = S;
   document.querySelectorAll("#seg button").forEach(b => b.classList.toggle("on", b.dataset.t === type));
+  document.body.classList.toggle("ro", S.statut === "publie");
+  if(window.loadShared) loadShared();
   // Visuel par défaut facultatif
   await new Promise(r => { const i = new Image(); i.onload = () => { defaultVisuelOk = true; r(); }; i.onerror = r; i.src = VISUEL_DEFAUT; });
   renderForm();
@@ -742,5 +832,6 @@ function demo(t){
 })();
 </script>
 <script src="import.js"></script>
+<script src="historique.js"></script>
 </body>
 </html>
