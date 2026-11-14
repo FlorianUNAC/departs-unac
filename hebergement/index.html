@@ -225,6 +225,7 @@
   <div class="sp"></div>
   <div class="acts" style="display:flex;gap:8px;align-items:center">
     <div class="seg" id="seg"><button data-t="LC">LC</button><button data-t="MC">MC</button></div>
+    <button class="btn ghost" id="resetBtn" title="Effacer le compte rendu en cours et repartir d'une page vierge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span class="lg">Recommencer</span></button>
     <div class="menu" id="menu">
       <button class="btn ghost" id="menuBtn" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg><span class="lg">Brouillon</span></button>
       <div class="dd">
@@ -642,11 +643,15 @@ $("#fileJson").addEventListener("change", async ev => {
   const f = ev.target.files[0]; ev.target.value = ""; if(!f) return;
   try{ incoming(JSON.parse(await f.text())); }catch(e){ toast("Fichier illisible"); }
 });
-$("#aReset").addEventListener("click", () => {
+function resetCR(){
   menu.classList.remove("open");
-  if(!confirm(`Effacer tout le compte rendu ${type} en cours ?`)) return;
+  if(!confirm(`Recommencer à zéro ?\n\nTout le compte rendu ${type} en cours sera effacé (escales, textes, « À noter », visuel). Pensez à enregistrer le brouillon si besoin.`)) return;
   S = blank(type); changed(true);
-});
+  $("#form").scrollTop = 0; tab = "saisie"; syncTab();
+  toast(`Nouveau compte rendu ${type} vierge`);
+}
+$("#aReset").addEventListener("click", resetCR);
+$("#resetBtn").addEventListener("click", resetCR);
 $("#aDemo").addEventListener("click", () => {
   menu.classList.remove("open");
   const hasContent = S.zones.some(z => z.escales.some(e => e.texte.trim()));
