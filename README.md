@@ -10,3 +10,9 @@ Tableau des départs Air France de CDG avec les horaires de briefing PNC, pour l
 Le générateur du compte rendu de la commission hébergement a été déplacé dans le dépôt `atelier-unac` (florianunac.github.io/atelier-unac/) ; `hebergement/` ne contient plus qu'une redirection.
 
 La clé Air France-KLM est stockée dans le secret `AFKL_API_KEY` du dépôt (Settings → Secrets and variables → Actions). Elle n'apparaît ni dans le code ni dans la page.
+
+## Planning ménage · studio La Grande Motte (hors UNAC)
+
+- `menage/` : la page pour l'agent de ménage (florianunac.github.io/departs-unac/menage/).
+- `scripts/menage-airbnb.mjs` + `.github/workflows/menage.yml` : toutes les heures, le robot lit le calendrier iCal Airbnb et écrit `data/menage.json` (dates de séjour uniquement, aucune donnée voyageur).
+- Le lien iCal Airbnb est stocké dans le secret `AIRBNB_ICAL_URL` du dépôt. Il n'apparaît ni dans le code ni dans la page.
